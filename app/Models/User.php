@@ -24,6 +24,7 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+    protected $guarded = ['id'];
     protected function casts(): array
     {
         return [

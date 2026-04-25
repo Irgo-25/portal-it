@@ -70,6 +70,9 @@ export function NavUserManagement({ items = [] }: { items: UserMenuItem[] }) {
                                                         href={subItem.href}
                                                         prefetch
                                                     >
+                                                        {subItem.icon && (
+                                                            <subItem.icon />
+                                                        )}
                                                         <span>
                                                             {subItem.title}
                                                         </span>

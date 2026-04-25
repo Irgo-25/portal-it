@@ -1,5 +1,10 @@
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, RollerCoaster, User2Icon, UserCircle } from 'lucide-react';
+import {
+    LayoutGrid,
+    ShieldCloseIcon,
+    User2Icon,
+    UserCircle,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -13,6 +18,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import users from '@/routes/users';
 import type { NavItem, UserMenuItem } from '@/types';
 import { NavUserManagement } from './nav-user-management';
 
@@ -31,13 +37,13 @@ const mainNavUserManagementItems: UserMenuItem[] = [
         items: [
             {
                 title: 'All Users',
-                href: '/users',
+                href: users.index(),
                 icon: User2Icon,
             },
             {
                 title: 'Roles',
                 href: '/roles',
-                icon: RollerCoaster,
+                icon: ShieldCloseIcon,
             },
         ],
     },
