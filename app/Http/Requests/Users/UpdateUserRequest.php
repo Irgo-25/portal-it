@@ -34,4 +34,16 @@ class UpdateUserRequest extends FormRequest
             'password' => ['nullable', 'string', 'min:8'],
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'name.string' => 'Nama harus berupa string.',
+            'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+            'email.email' => 'Email harus berupa alamat email yang valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            'email.unique' => 'Email sudah digunakan.',
+            'password.string' => 'Password harus berupa string.',
+            'password.min' => 'Password harus minimal 8 karakter.',
+        ];
+    }
 }

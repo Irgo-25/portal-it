@@ -3,13 +3,18 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    public function view()
+    public function view(Request $request)
     {
-        return User::query()->paginate(10)->through( fn($user) => [
+        $perPage = $request->get('perPage', 10);
+        $search = $request->get('search', '');
+        $sortBy = $request->get('sortBy', 'created_at');
+        $sortDirection = $request->get('sortDirection', 'desc');
+        return User::query()->paginate($perPage)->through( fn($user) => [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
