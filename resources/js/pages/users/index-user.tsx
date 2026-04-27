@@ -8,8 +8,10 @@ import { DataTable } from './data-table';
 interface Props {
     users: {
         data: any[];
+        total: number;
     };
 }
+
 export default function IndexUser({ users }: Props) {
     return (
         <>
@@ -24,11 +26,13 @@ export default function IndexUser({ users }: Props) {
                 <DataTable
                     columns={userColumns as ColumnDef<unknown, unknown>[]}
                     data={users.data}
+                    pagination={users}
                 />
             </div>
         </>
     );
 }
+
 IndexUser.layout = {
     breadcrumbs: [
         {

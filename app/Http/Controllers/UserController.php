@@ -21,8 +21,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = $this->userService->view();
-        return Inertia::render('users/index-user', compact('users'));
+        $users = $this->userService->view($request);
+        $filters = $request->only(['search', 'perPage', 'sortBy', 'sortDirection']);
+        return Inertia::render('users/index-user', compact('users', 'filters'));
     }
 
     /**

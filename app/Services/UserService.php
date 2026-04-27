@@ -12,14 +12,40 @@ class UserService
     {
         $perPage = $request->get('perPage', 10);
         $search = $request->get('search', '');
-        $sortBy = $request->get('sortBy', 'created_at');
-        $sortDirection = $request->get('sortDirection', 'desc');
-        return User::query()->paginate($perPage)->through( fn($user) => [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'created_at' => $user->created_at->format('d-M-Y H:i:s'),
-        ]);
+
+        $allowedSorts = [
+            'name',
+            'email',
+            'created_at',
+        ];
+
+        $sortBy = in_array(
+            $request->get('sortBy'),
+            $allowedSorts
+        )
+            ? $request->get('sortBy')
+            : 'created_at';
+
+        $sortDirection = $request->get('sortDirection') === 'asc'
+            ? 'asc'
+            : 'desc';
+
+        return User::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy($sortBy, $sortDirection)
+            ->paginate($perPage)
+            ->withQueryString()
+            ->through(fn($user) => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'created_at' => $user->created_at->format('d-M-Y H:i:s'),
+            ]);
     }
     public function create(array $data)
     {
