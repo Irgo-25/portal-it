@@ -69,4 +69,11 @@ class UserService
     {
         return $user->delete();
     }
+    public function bulkDelete (Request $request){
+        $ids = $request->ids;
+        return User::whereIn('id', $ids)->delete();
+        return back()->with(    
+            'success', 'Deleted successfully'
+        );
+    }
 }

@@ -11,6 +11,10 @@ Route::inertia('/', 'welcome', [
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
     Route::resource('users', UserController::class);
+    Route::post(
+        '/users/bulk-delete',
+        [UserController::class, 'bulkDelete']
+    )->name('users.bulk-delete');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

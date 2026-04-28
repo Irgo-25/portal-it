@@ -1,9 +1,9 @@
 import { Head } from '@inertiajs/react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { route } from 'ziggy-js';
+import { DataTable } from '@/components/DataTable/data-table';
 import { Button } from '@/components/ui/button';
 import { userColumns } from './columns';
-import { DataTable } from './data-table';
 
 interface Props {
     users: {
@@ -24,7 +24,7 @@ export default function IndexUser({ users }: Props) {
                     </Button>
                 </div>
                 <DataTable
-                    columns={userColumns as ColumnDef<unknown, unknown>[]}
+                    columns={userColumns as ColumnDef<any, unknown>[]}
                     data={users.data}
                     pagination={users}
                 />

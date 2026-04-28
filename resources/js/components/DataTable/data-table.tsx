@@ -1,7 +1,7 @@
 'use client';
 
 import { router } from '@inertiajs/react';
-import type { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table';
 import {
     flexRender,
     getCoreRowModel,
@@ -9,10 +9,12 @@ import {
 } from '@tanstack/react-table';
 
 import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
+
 import { route } from 'ziggy-js';
 
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import {
     Select,
@@ -30,7 +32,9 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-
+interface HasId {
+    id: number;
+}
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
@@ -47,38 +51,67 @@ interface DataTableProps<TData, TValue> {
     };
 }
 
-export const DataTable = memo(function DataTable<TData, TValue>({
+export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
     columns,
     data,
     pagination,
     filters,
 }: DataTableProps<TData, TValue>) {
+    const [search, setSearch] = useState(filters?.search || '');
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            router.get(
+                route('users.index'),
+                {
+                    ...filters,
+                    search,
+                    page: 1,
+                },
+                {
+                    preserveState: true,
+                    replace: true,
+                },
+            );
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, [filters, search]);
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        enableRowSelection: true,
+        state: {
+            rowSelection,
+        },
+        onRowSelectionChange: setRowSelection,
     });
 
     /*
     =========================
-    SEARCH
+    Bulk Actions
     =========================
     */
-    const handleSearch = (value: string) => {
-        router.get(
-            route('users.index'),
+    const handleBulkDelete = () => {
+        const selectedIds = table
+            .getSelectedRowModel()
+            .rows.map((row) => row.original.id);
+
+        if (!selectedIds.length) {
+            return;
+        }
+
+        router.post(
+            route('users.bulk-delete'),
             {
-                ...filters,
-                search: value,
-                page: 1,
+                ids: selectedIds,
             },
             {
-                preserveState: true,
-                replace: true,
+                preserveScroll: true,
             },
         );
     };
-
     /*
     =========================
     PER PAGE
@@ -93,7 +126,7 @@ export const DataTable = memo(function DataTable<TData, TValue>({
                 page: 1,
             },
             {
-                preserveState: true,
+                preserveScroll: true,
                 replace: true,
             },
         );
@@ -105,12 +138,17 @@ export const DataTable = memo(function DataTable<TData, TValue>({
     =========================
     */
     const handleSort = (column: string) => {
-        const isSameColumn = filters?.sortBy === column;
+        const params = new URLSearchParams(window.location.search);
+
+        const currentSortBy = params.get('sortBy');
+        const currentDirection = params.get('sortDirection');
+
+        const isSameColumn = currentSortBy === column;
 
         let direction = 'asc';
 
         if (isSameColumn) {
-            direction = filters?.sortDirection === 'asc' ? 'desc' : 'asc';
+            direction = currentDirection === 'asc' ? 'desc' : 'asc';
         }
 
         router.get(
@@ -122,20 +160,25 @@ export const DataTable = memo(function DataTable<TData, TValue>({
                 page: 1,
             },
             {
-                preserveState: true,
+                preserveScroll: true,
                 replace: true,
             },
         );
     };
 
     const renderSortIcon = (column: string) => {
-        const isActive = filters?.sortBy === column;
+        const params = new URLSearchParams(window.location.search);
+
+        const currentSortBy = params.get('sortBy');
+        const currentDirection = params.get('sortDirection');
+
+        const isActive = currentSortBy === column;
 
         if (!isActive) {
             return <ArrowUpDown className="ml-2 h-4 w-4 opacity-40" />;
         }
 
-        if (filters?.sortDirection === 'asc') {
+        if (currentDirection === 'asc') {
             return <ArrowUp className="ml-2 h-4 w-4" />;
         }
 
@@ -152,8 +195,8 @@ export const DataTable = memo(function DataTable<TData, TValue>({
                         <Input
                             type="text"
                             placeholder="Search"
-                            value={filters?.search || ''}
-                            onChange={(e) => handleSearch(e.target.value)}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                             className="w-64 rounded-md border px-2 py-1"
                         />
                     </div>
@@ -177,14 +220,33 @@ export const DataTable = memo(function DataTable<TData, TValue>({
                             </SelectContent>
                         </Select>
                     </div>
+
+                    {/* BULK ACTIONS */}
+                    <div className="flex items-center gap-4">
+                        <Button
+                            variant="destructive"
+                            onClick={handleBulkDelete}
+                            disabled={!table.getSelectedRowModel().rows.length}
+                        >
+                            Delete
+                        </Button>
+                    </div>
                 </div>
             </div>
 
             {/* TABLE */}
-            <div className="overflow-hidden rounded-md border">
+            <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead className="w-12">
+                                <Checkbox
+                                    checked={table.getIsAllRowsSelected()}
+                                    onCheckedChange={(value) =>
+                                        table.toggleAllRowsSelected(!!value)
+                                    }
+                                />
+                            </TableHead>
                             {columns.map((column: any) => (
                                 <TableHead
                                     key={column.accessorKey || column.id}
@@ -210,16 +272,20 @@ export const DataTable = memo(function DataTable<TData, TValue>({
                             ))}
                         </TableRow>
                     </TableHeader>
-
                     <TableBody>
-                        {table.getRowModel().rows?.length ? (
+                        {table.getRowModel().rows.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={
-                                        row.getIsSelected() && 'selected'
-                                    }
-                                >
+                                <TableRow key={row.id}>
+                                    {/* CHECKBOX CELL */}
+                                    <TableCell>
+                                        <Checkbox
+                                            checked={row.getIsSelected()}
+                                            onCheckedChange={(value) =>
+                                                row.toggleSelected(!!value)
+                                            }
+                                        />
+                                    </TableCell>
+
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
                                             {flexRender(
@@ -233,7 +299,7 @@ export const DataTable = memo(function DataTable<TData, TValue>({
                         ) : (
                             <TableRow>
                                 <TableCell
-                                    colSpan={columns.length}
+                                    colSpan={columns.length + 1}
                                     className="h-24 text-center"
                                 >
                                     No results.
