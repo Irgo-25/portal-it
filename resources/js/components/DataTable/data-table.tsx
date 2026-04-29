@@ -13,6 +13,7 @@ import { memo, useEffect, useState } from 'react';
 
 import { route } from 'ziggy-js';
 
+import CardConfirmation from '@/components/card-confirmation';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -93,6 +94,9 @@ export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
     Bulk Actions
     =========================
     */
+    const [openBulkDelete, setOpenBulkDelete] = useState(false);
+    const [loadingDelete, setLoadingDelete] = useState(false);
+
     const handleBulkDelete = () => {
         const selectedIds = table
             .getSelectedRowModel()
@@ -102,6 +106,7 @@ export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
             return;
         }
 
+        setLoadingDelete(true);
         router.post(
             route('users.bulk-delete'),
             {
@@ -109,6 +114,11 @@ export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
             },
             {
                 preserveScroll: true,
+                onFinish: () => {
+                    setLoadingDelete(false);
+                    setOpenBulkDelete(false);
+                    setRowSelection({});
+                },
             },
         );
     };
@@ -187,6 +197,16 @@ export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
 
     return (
         <>
+            {/* CARD CONFIRMATION */}
+            {openBulkDelete && (
+                <div className="fixed inset-0 z-50 items-center justify-center bg-black/50 p-4">
+                    <CardConfirmation
+                        loading={loadingDelete}
+                        onConfirm={handleBulkDelete}
+                        onCancel={() => setOpenBulkDelete(false)}
+                    />
+                </div>
+            )}
             {/* FILTER BAR */}
             <div>
                 <div className="flex items-center justify-start gap-3 bg-card py-2">
@@ -225,7 +245,7 @@ export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
                     <div className="flex items-center gap-4">
                         <Button
                             variant="destructive"
-                            onClick={handleBulkDelete}
+                            onClick={() => setOpenBulkDelete(true)}
                             disabled={!table.getSelectedRowModel().rows.length}
                         >
                             Delete
