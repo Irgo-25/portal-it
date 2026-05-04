@@ -34,7 +34,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 interface HasId {
-    id: number;
+    id_departement: number;
 }
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -62,7 +62,7 @@ export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
     useEffect(() => {
         const timeout = setTimeout(() => {
             router.get(
-                route('users.index'),
+                route('departements.index'),
                 {
                     ...filters,
                     search,
@@ -98,19 +98,19 @@ export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
     const [loadingDelete, setLoadingDelete] = useState(false);
 
     const handleBulkDelete = () => {
-        const selectedIds = table
+        const selectedIdDepartements = table
             .getSelectedRowModel()
-            .rows.map((row) => row.original.id);
+            .rows.map((row) => row.original.id_departement);
 
-        if (!selectedIds.length) {
+        if (!selectedIdDepartements.length) {
             return;
         }
 
         setLoadingDelete(true);
         router.post(
-            route('users.bulk-delete'),
+            route('departements.bulk-delete'),
             {
-                ids: selectedIds,
+                id_departements: selectedIdDepartements,
             },
             {
                 preserveScroll: true,
@@ -129,7 +129,7 @@ export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
     */
     const handlePerPage = (value: string) => {
         router.get(
-            route('users.index'),
+            route('departements.index'),
             {
                 ...filters,
                 perPage: value,
@@ -162,7 +162,7 @@ export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
         }
 
         router.get(
-            route('users.index'),
+            route('departements.index'),
             {
                 ...filters,
                 sortBy: column,

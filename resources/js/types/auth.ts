@@ -10,6 +10,14 @@ export type User = {
     [key: string]: unknown;
 };
 
+export type Departement = {
+    id_departement: number;
+    name: string;
+    code: string;
+    created_at: string;
+    updated_at: string;
+};
+
 export type Auth = {
     user: User;
 };

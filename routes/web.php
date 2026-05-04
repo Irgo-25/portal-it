@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -15,6 +16,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         '/users/bulk-delete',
         [UserController::class, 'bulkDelete']
     )->name('users.bulk-delete');
+    Route::resource('departements', DepartementController::class);
+    Route::post(
+        '/departements/bulk-delete',
+        [DepartementController::class, 'bulkDelete']
+    )->name('departements.bulk-delete');
 });
 
 require __DIR__ . '/settings.php';

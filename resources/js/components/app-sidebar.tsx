@@ -1,5 +1,7 @@
 import { Link } from '@inertiajs/react';
 import {
+    Building2,
+    Cog,
     LayoutGrid,
     ShieldCloseIcon,
     User2Icon,
@@ -18,6 +20,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import departements from '@/routes/departements';
 import users from '@/routes/users';
 import type { NavItem, UserMenuItem, MasterDataMenuItem } from '@/types';
 import { NavMasterData } from './nav-master-data';
@@ -52,12 +55,12 @@ const mainNavUserManagementItems: UserMenuItem[] = [
 const mainMasterDataItems: MasterDataMenuItem[] = [
     {
         title: 'Master Data',
-        icon: UserCircle,
+        icon: Cog,
         items: [
             {
                 title: 'Departement',
-                href: users.index(),
-                icon: User2Icon,
+                href: departements.index(),
+                icon: Building2,
             },
         ],
     },
