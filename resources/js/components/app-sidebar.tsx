@@ -19,7 +19,8 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import users from '@/routes/users';
-import type { NavItem, UserMenuItem } from '@/types';
+import type { NavItem, UserMenuItem, MasterDataMenuItem } from '@/types';
+import { NavMasterData } from './nav-master-data';
 import { NavUserManagement } from './nav-user-management';
 
 const mainNavItems: NavItem[] = [
@@ -48,6 +49,19 @@ const mainNavUserManagementItems: UserMenuItem[] = [
         ],
     },
 ];
+const mainMasterDataItems: MasterDataMenuItem[] = [
+    {
+        title: 'Master Data',
+        icon: UserCircle,
+        items: [
+            {
+                title: 'Departement',
+                href: users.index(),
+                icon: User2Icon,
+            },
+        ],
+    },
+];
 
 export function AppSidebar() {
     return (
@@ -67,6 +81,7 @@ export function AppSidebar() {
             <SidebarContent>
                 <NavMain items={mainNavItems} />
                 <NavUserManagement items={mainNavUserManagementItems} />
+                <NavMasterData items={mainMasterDataItems} />
             </SidebarContent>
 
             <SidebarFooter>
