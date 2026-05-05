@@ -9,6 +9,7 @@ import { DataTable } from '@/components/DataTable/data-table';
 import { Button } from '@/components/ui/button';
 import type { User } from '@/types';
 import { userColumns } from './columns';
+import UserFormDialog from './user-form-dialog';
 
 interface Props {
     users: {
@@ -20,9 +21,19 @@ interface Props {
 }
 
 export default function IndexUser({ users }: Props) {
+    const [openForm, setOpenForm] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
     const [openDelete, setOpenDelete] = useState(false);
+
+    /*
+    =====================================
+    OPEN EDIT MODAL
+    =====================================
+    */
+    const openCardEdit = (user: User) => {
+        setSelectedUser(user);
+        setOpenForm(true);
+    };
 
     const [loadingDelete, setLoadingDelete] = useState(false);
 
@@ -67,14 +78,20 @@ export default function IndexUser({ users }: Props) {
                 <div className="mb-4 flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Users Management</h1>
 
-                    <Button asChild>
-                        <a href={route('users.create')}>Create User</a>
+                    <Button
+                        onClick={() => {
+                            setSelectedUser(null);
+                            setOpenForm(true);
+                        }}
+                    >
+                        New User
                     </Button>
                 </div>
 
                 <DataTable
                     columns={userColumns({
                         openCardDelete,
+                        openCardEdit,
                     })}
                     data={users.data}
                     pagination={users}
@@ -98,6 +115,11 @@ export default function IndexUser({ users }: Props) {
                     />
                 </div>
             )}
+            <UserFormDialog
+                open={openForm}
+                onClose={() => setOpenForm(false)}
+                user={selectedUser}
+            />
         </>
     );
 }

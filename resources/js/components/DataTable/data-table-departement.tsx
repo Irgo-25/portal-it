@@ -33,7 +33,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-interface HasId {
+interface HasIdDepartement {
     id_departement: number;
 }
 interface DataTableProps<TData, TValue> {
@@ -52,12 +52,10 @@ interface DataTableProps<TData, TValue> {
     };
 }
 
-export const DataTable = memo(function DataTable<TData extends HasId, TValue>({
-    columns,
-    data,
-    pagination,
-    filters,
-}: DataTableProps<TData, TValue>) {
+export const DataTable = memo(function DataTable<
+    TData extends HasIdDepartement,
+    TValue,
+>({ columns, data, pagination, filters }: DataTableProps<TData, TValue>) {
     const [search, setSearch] = useState(filters?.search || '');
     useEffect(() => {
         const timeout = setTimeout(() => {

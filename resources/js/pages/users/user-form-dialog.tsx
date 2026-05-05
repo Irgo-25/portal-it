@@ -14,76 +14,70 @@ import {
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 
-interface DepartementFormDialogProps {
+interface userFormDialogProps {
     open: boolean;
     onClose: () => void;
-    departement?: {
-        id_departement: number;
+    user?: {
+        id: number;
         name: string;
-        code: string;
+        email: string;
+        password: string;
     } | null;
 }
-export default function DepartementFormDialog({
+export default function UserFormDialog({
     open,
     onClose,
-    departement,
-}: DepartementFormDialogProps) {
-    const isEditing = !!departement;
+    user,
+}: userFormDialogProps) {
+    const isEditing = !!user;
 
     const [form, setForm] = useState({
         name: '',
-        code: '',
+        email: '',
+        password: '',
     });
 
     const [loading, setLoading] = useState(false);
 
     const resetForm = () => {
-        if (departement) {
-            setForm({
-                name: departement.name,
-                code: departement.code,
-            });
-        } else {
-            setForm({
-                name: '',
-                code: '',
-            });
-        }
+        setForm({
+            name: '',
+            email: '',
+            password: '',
+        });
     };
 
     // fill form if edit
     useEffect(() => {
-        if (departement) {
+        if (user) {
             setForm({
-                name: departement.name,
-                code: departement.code,
+                name: user.name,
+                email: user.email,
+                password: '',
             });
         } else {
             setForm({
                 name: '',
-                code: '',
+                email: '',
+                password: '',
             });
         }
-    }, [departement]);
+    }, [user]); // ✅ penting
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         if (isEditing) {
-            router.put(
-                route('departements.update', departement!.id_departement),
-                form,
-                {
-                    preserveScroll: true,
-                    onSuccess: () => {
-                        setLoading(false);
-                        resetForm();
-                        onClose();
-                    },
+            router.put(route('users.update', user!.id), form, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setLoading(false);
+                    resetForm();
+                    onClose();
                 },
-            );
+            });
         } else {
-            router.post(route('departements.store'), form, {
+            router.post(route('users.store'), form, {
                 preserveScroll: true,
                 onSuccess: () => {
                     setLoading(false);
@@ -107,20 +101,18 @@ export default function DepartementFormDialog({
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {isEditing
-                                ? 'Edit Departement'
-                                : 'Create Departement'}
+                            {isEditing ? 'Edit user' : 'Create user'}
                         </DialogTitle>
                         <DialogDescription>
-                            {isEditing
-                                ? 'Edit your departement'
-                                : 'Create new departement'}
+                            {isEditing ? 'Edit your user' : 'Create new user'}
                         </DialogDescription>
                     </DialogHeader>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <Input
                             placeholder="Name"
+                            autoFocus
+                            type="text"
                             value={form.name}
                             onChange={(e) =>
                                 setForm({
@@ -131,12 +123,25 @@ export default function DepartementFormDialog({
                         />
 
                         <Input
-                            placeholder="Code Departement"
-                            value={form.code}
+                            placeholder="Email"
+                            type="email"
+                            value={form.email}
                             onChange={(e) =>
                                 setForm({
                                     ...form,
-                                    code: e.target.value,
+                                    email: e.target.value,
+                                })
+                            }
+                        />
+
+                        <Input
+                            placeholder="Password"
+                            type="password"
+                            value={form.password}
+                            onChange={(e) =>
+                                setForm({
+                                    ...form,
+                                    password: e.target.value,
                                 })
                             }
                         />

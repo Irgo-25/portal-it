@@ -1,6 +1,5 @@
 'use client';
 
-import { Link } from '@inertiajs/react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 
@@ -11,8 +10,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import departements from '@/routes/departements';
-
 export type Departement = {
     id_departement: number;
     name: string;
@@ -21,10 +18,12 @@ export type Departement = {
 
 interface DepartemntColumnsProps {
     openCardDelete: (departement: Departement) => void;
+    openCardEdit: (departement: Departement) => void;
 }
 
 export const departementColumns = ({
     openCardDelete,
+    openCardEdit,
 }: DepartemntColumnsProps): ColumnDef<Departement>[] => [
     {
         accessorKey: 'name',
@@ -56,15 +55,11 @@ export const departementColumns = ({
 
                     <DropdownMenuContent align="end">
                         {/* EDIT */}
-                        <DropdownMenuItem asChild>
-                            <Link
-                                href={departements.edit(
-                                    departement.id_departement,
-                                )}
-                                className="cursor-pointer text-yellow-500"
-                            >
-                                Edit
-                            </Link>
+                        <DropdownMenuItem
+                            onClick={() => openCardEdit(departement)}
+                            className="cursor-pointer text-amber-600"
+                        >
+                            Edit
                         </DropdownMenuItem>
 
                         {/* DELETE */}

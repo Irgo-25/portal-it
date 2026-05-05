@@ -25,6 +25,11 @@ export default function IndexDepartement({ departements }: Props) {
     const [openDelete, setOpenDelete] = useState(false);
 
     const [loadingDelete, setLoadingDelete] = useState(false);
+    // OPEN EDIT MODAL
+    const openCardEdit = (departement: Departement) => {
+        setSelectedDepartement(departement);
+        setOpenForm(true);
+    };
 
     /*
     =====================================
@@ -85,6 +90,7 @@ export default function IndexDepartement({ departements }: Props) {
                 <DataTable
                     columns={departementColumns({
                         openCardDelete,
+                        openCardEdit,
                     })}
                     data={departements.data}
                     pagination={departements}

@@ -2,51 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Departement\StoreDepartement;
+use App\Http\Requests\Departement\UpdateDepartement;
 use App\Models\Departement;
+use App\Services\DepartementService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DepartementController extends Controller
 {
+    protected DepartementService $departementService;
+    public function __construct(DepartementService $departementService)
+    {
+        $this->departementService = $departementService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $perPage = $request->get('perPage', 10);
-        $search = $request->get('search', '');
-
-        $allowedSorts = [
-            'name',
-            'code',
-        ];
-
-        $sortBy = in_array(
-            $request->get('sortBy'),
-            $allowedSorts
-        )
-            ? $request->get('sortBy')
-            : 'name';
-
-        $sortDirection = $request->get('sortDirection') === 'asc'
-            ? 'asc'
-            : 'desc';
-
-        $departements = Departement::query()
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
-                        ->orWhere('code', 'like', "%{$search}%");
-                });
-            })
-            ->orderBy($sortBy, $sortDirection)
-            ->paginate($perPage)
-            ->withQueryString()
-            ->through(fn($departement) => [
-                'id_departement' => $departement->id_departement,
-                'name' => $departement->name,
-                'code' => $departement->code,
-            ]);
+        $departements = $this->departementService->view($request);
         $filters = $request->only(['search', 'perPage', 'sortBy', 'sortDirection']);
         return Inertia::render('departements/index-departement', compact('departements', 'filters'));
     }
@@ -62,13 +37,9 @@ class DepartementController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreDepartement $request)
     {
-        $departement = $request->validate([
-            'name' => 'required',
-            'code' => 'required|min:3',
-        ]);
-        Departement::create($departement);
+        $this->departementService->store($request->validated());
         return redirect()->route('departements.index')->with('success', 'Departement created successfully.');
     }
 
@@ -91,24 +62,21 @@ class DepartementController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Departement $departement) {}
+    public function update(UpdateDepartement $request, Departement $departement) {
+        $this->departementService->update($departement, $request->validated());
+        return redirect()->route('departements.index')->with('success', 'Departement updated successfully.');
+    }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Departement $departement)
     {
-        Departement::findOrFail($departement)->delete();
-
-        return redirect()
-            ->route('departements.index')
-            ->with('success', 'Departement deleted successfully');
+        $this->departementService->destroy($departement);
+        return redirect()->route('departements.index')->with('success', 'Departement deleted successfully.');
     }
      public function bulkDelete (Request $request){
-        $id_departements = $request->id_departements;
-        return Departement::whereIn('id_departement', $id_departements)->delete();
-        return back()->with(    
-            'success', 'Deleted successfully'
-        );
+        $this->departementService->bulkDelete($request);
+        return redirect()->route('departements.index')->with('success', 'Departements deleted successfully.');
     }
 }

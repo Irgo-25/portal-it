@@ -1,6 +1,5 @@
 'use client';
 
-import { Link } from '@inertiajs/react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 
@@ -11,8 +10,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import users from '@/routes/users';
-
 export type User = {
     id: number;
     name: string;
@@ -22,10 +19,12 @@ export type User = {
 
 interface UserColumnsProps {
     openCardDelete: (user: User) => void;
+    openCardEdit: (user: User) => void;
 }
 
 export const userColumns = ({
     openCardDelete,
+    openCardEdit,
 }: UserColumnsProps): ColumnDef<User>[] => [
     {
         accessorKey: 'name',
@@ -59,23 +58,17 @@ export const userColumns = ({
                             <MoreHorizontal className="h-4 w-4" />
                         </button>
                     </DropdownMenuTrigger>
-
                     <DropdownMenuContent align="end">
-                        {/* EDIT */}
-                        <DropdownMenuItem asChild>
-                            <Link
-                                href={users.edit(user.id)}
-                                className="cursor-pointer text-yellow-500"
-                            >
-                                Edit
-                            </Link>
+                        <DropdownMenuItem
+                            onClick={() => openCardEdit(user)}
+                            className="cursor-pointer text-amber-600"
+                        >
+                            Edit
                         </DropdownMenuItem>
 
                         {/* DELETE */}
                         <DropdownMenuItem
-                            onClick={() =>
-                                openCardDelete(user)
-                            }
+                            onClick={() => openCardDelete(user)}
                             className="cursor-pointer text-red-500"
                         >
                             Delete

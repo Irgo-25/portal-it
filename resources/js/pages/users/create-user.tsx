@@ -10,7 +10,6 @@ export default function CreateUser() {
         password: '',
     });
 
-
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('users.store'));
