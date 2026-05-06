@@ -44,11 +44,6 @@ const mainNavUserManagementItems: UserMenuItem[] = [
                 href: users.index(),
                 icon: User2Icon,
             },
-            {
-                title: 'Roles',
-                href: '/roles',
-                icon: ShieldCloseIcon,
-            },
         ],
     },
 ];
@@ -83,8 +78,8 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <NavMain items={mainNavItems} />
-                <NavUserManagement items={mainNavUserManagementItems} />
                 <NavMasterData items={mainMasterDataItems} />
+                <NavUserManagement items={mainNavUserManagementItems} />
             </SidebarContent>
 
             <SidebarFooter>

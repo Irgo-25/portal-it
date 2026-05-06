@@ -40,11 +40,19 @@ export default function UserFormDialog({
     const [loading, setLoading] = useState(false);
 
     const resetForm = () => {
-        setForm({
-            name: '',
-            email: '',
-            password: '',
-        });
+        if (user) {
+            setForm({
+                name: user.name,
+                email: user.email,
+                password: '',
+            });
+        } else {
+            setForm({
+                name: '',
+                email: '',
+                password: '',
+            });
+        }
     };
 
     // fill form if edit
@@ -62,7 +70,7 @@ export default function UserFormDialog({
                 password: '',
             });
         }
-    }, [user]); // ✅ penting
+    }, [user?.id]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

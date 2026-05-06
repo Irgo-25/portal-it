@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { route } from 'ziggy-js';
 
 import CardConfirmation from '@/components/card-confirmation';
-import { DataTable } from '@/components/DataTable/data-table';
+import { DataTable } from '@/components/DataTable/general-data-table';
 import { Button } from '@/components/ui/button';
 import type { User } from '@/types';
 import { userColumns } from './columns';
@@ -94,7 +94,8 @@ export default function IndexUser({ users }: Props) {
                         openCardEdit,
                     })}
                     data={users.data}
-                    pagination={users}
+                    routeName="users.index"
+                    bulkDeleteRoute="users.bulk-delete"
                 />
             </div>
 

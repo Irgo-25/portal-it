@@ -1,6 +1,5 @@
-import { usePage } from '@inertiajs/react';
-import { useEffect } from 'react';
-import { toast } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
+import { useFlashToast } from '@/hooks/use-flash-toast';
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import type { BreadcrumbItem } from '@/types';
 
@@ -11,26 +10,12 @@ export default function AppLayout({
     breadcrumbs?: BreadcrumbItem[];
     children: React.ReactNode;
 }) {
-    const { flash } = usePage().props as {
-        flash?: {
-            success?: string;
-            error?: string;
-        };
-    };
-
-    useEffect(() => {
-        if (flash?.success) {
-            toast.success(flash.success);
-        }
-
-        if (flash?.error) {
-            toast.error(flash.error);
-        }
-    }, [flash]);
+    useFlashToast();
 
     return (
         <AppLayoutTemplate breadcrumbs={breadcrumbs}>
             {children}
+            <Toaster richColors position="top-right" />
         </AppLayoutTemplate>
     );
 }
