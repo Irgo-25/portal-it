@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { route } from 'ziggy-js';
 import CardConfirmation from '@/components/card-confirmation';
-import { DataTable } from '@/components/DataTable/data-table-departement';
+import { DataTable } from '@/components/DataTable/data-table';
 import { Button } from '@/components/ui/button';
 import type { Departement } from '@/types';
 import { departementColumns } from './columns';
@@ -94,6 +94,8 @@ export default function IndexDepartement({ departements }: Props) {
                     })}
                     data={departements.data}
                     pagination={departements}
+                    routeName="departements.index"
+                    bulkDeleteRoute="departements.bulk-delete"
                 />
                 {/* DELETE CONFIRMATION MODAL */}
                 {openDelete && selectedDepartement && (
