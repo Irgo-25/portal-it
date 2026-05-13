@@ -1,6 +1,7 @@
 'use-client';
 
 import { router } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react';
 import { route } from 'ziggy-js';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,7 @@ interface userFormDialogProps {
         email: string;
         password: string;
     } | null;
+    errors: Record<string, string | string[]>;
 }
 export default function UserFormDialog({
     open,
@@ -30,7 +32,6 @@ export default function UserFormDialog({
     user,
 }: userFormDialogProps) {
     const isEditing = !!user;
-
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -38,7 +39,7 @@ export default function UserFormDialog({
     });
 
     const [loading, setLoading] = useState(false);
-
+    const { errors } = usePage().props as { errors: Record<string, string> };
     const resetForm = () => {
         if (user) {
             setForm({
@@ -129,6 +130,11 @@ export default function UserFormDialog({
                                 })
                             }
                         />
+                        {errors.name && (
+                            <p className="text-sm text-red-500">
+                                {errors.name}
+                            </p>
+                        )}
 
                         <Input
                             placeholder="Email"
@@ -141,7 +147,11 @@ export default function UserFormDialog({
                                 })
                             }
                         />
-
+                        {errors.email && (
+                            <p className="text-sm text-red-500">
+                                {errors.email}
+                            </p>
+                        )}
                         <Input
                             placeholder="Password"
                             type="password"
@@ -153,7 +163,11 @@ export default function UserFormDialog({
                                 })
                             }
                         />
-
+                        {errors.password && (
+                            <p className="text-sm text-red-500">
+                                {errors.password}
+                            </p>
+                        )}
                         <div className="flex justify-end gap-2">
                             <Button
                                 type="button"
