@@ -14,28 +14,28 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
 
-interface userFormDialogProps {
+interface CategoryFormDialogProps {
     open: boolean;
     onClose: () => void;
-    user?: {
-        id: number;
+    category?: {
+        id_category: number;
         name: string;
-        email: string;
-        password: string;
+        description: string;
     } | null;
     errors: Record<string, string | string[]>;
 }
-export default function UserFormDialog({
+export default function CategoryFormDialog({
     open,
     onClose,
-    user,
-}: userFormDialogProps) {
-    const isEditing = !!user;
+    category,
+}: CategoryFormDialogProps) {
+    const isEditing = !!category;
+
     const [form, setForm] = useState({
         name: '',
-        email: '',
-        password: '',
+        description: '',
     });
 
     const [loading, setLoading] = useState(false);
@@ -43,56 +43,57 @@ export default function UserFormDialog({
         errors: Record<string, string>;
     };
     const [errors, setErrors] = useState<Record<string, string>>({});
+
     const resetForm = () => {
-        if (user) {
+        if (category) {
             setForm({
-                name: user.name,
-                email: user.email,
-                password: '',
+                name: category.name,
+                description: category.description,
             });
         } else {
             setForm({
                 name: '',
-                email: '',
-                password: '',
+                description: '',
             });
         }
     };
 
     // fill form if edit
     useEffect(() => {
-        if (user) {
+        if (category) {
             setForm({
-                name: user.name,
-                email: user.email,
-                password: '',
+                name: category.name,
+                description: category.description,
             });
         } else {
             setForm({
                 name: '',
-                email: '',
-                password: '',
+                description: '',
             });
         }
-    }, [user?.id]);
+    }, [category]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         if (isEditing) {
-            router.put(route('users.update', user!.id), form, {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setLoading(false);
-                    resetForm();
-                    onClose();
+            router.put(
+                route('categories.update', category!.id_category),
+                form,
+                {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        setLoading(false);
+                        resetForm();
+                        onClose();
+                    },
+                    onError: () => {
+                        setLoading(false);
+                    },
                 },
-                onError: () => {
-                    setLoading(false);
-                },
-            });
+            );
         } else {
-            router.post(route('users.store'), form, {
+            router.post(route('categories.store'), form, {
                 preserveScroll: true,
                 onSuccess: () => {
                     setLoading(false);
@@ -130,18 +131,19 @@ export default function UserFormDialog({
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {isEditing ? 'Edit user' : 'Create user'}
+                            {isEditing ? 'Edit Category' : 'Create Category'}
                         </DialogTitle>
                         <DialogDescription>
-                            {isEditing ? 'Edit your user' : 'Create new user'}
+                            {isEditing
+                                ? 'Edit your category'
+                                : 'Create new category'}
                         </DialogDescription>
                     </DialogHeader>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <Input
-                            placeholder="ex: john doe"
+                            placeholder="Name"
                             autoFocus
-                            type="text"
                             value={form.name}
                             onChange={(e) =>
                                 setForm({
@@ -157,40 +159,23 @@ export default function UserFormDialog({
                             </p>
                         )}
 
-                        <Input
-                            placeholder="ex: john@example.com"
-                            type="email"
-                            value={form.email}
+                        <Textarea
+                            placeholder="Description"
+                            value={form.description}
                             onChange={(e) =>
                                 setForm({
                                     ...form,
-                                    email: e.target.value,
+                                    description: e.target.value,
                                 })
                             }
-                            aria-invalid={!!errors.email}
+                            aria-invalid={!!errors.description}
                         />
-                        {errors.email && (
+                        {errors.description && (
                             <p className="text-sm text-red-500">
-                                {errors.email}
+                                {errors.description}
                             </p>
                         )}
-                        <Input
-                            placeholder="Password"
-                            type="password"
-                            value={form.password}
-                            onChange={(e) =>
-                                setForm({
-                                    ...form,
-                                    password: e.target.value,
-                                })
-                            }
-                            aria-invalid={!!errors.password}
-                        />
-                        {errors.password && (
-                            <p className="text-sm text-red-500">
-                                {errors.password}
-                            </p>
-                        )}
+
                         <div className="flex justify-end gap-2">
                             <Button type="submit" disabled={loading}>
                                 {loading ? (

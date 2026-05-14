@@ -71,7 +71,7 @@ class DepartementService
     }
     public function bulkDelete(Request $request)
     {
-        $id_departements = $request->id_departements;
+        $id_departements = $request->ids;
         return Departement::whereIn('id_departement', $id_departements)->delete();
     }
 }

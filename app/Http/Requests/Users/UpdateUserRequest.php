@@ -44,6 +44,8 @@ class UpdateUserRequest extends FormRequest
             'email.unique' => 'Email sudah digunakan.',
             'password.string' => 'Password harus berupa string.',
             'password.min' => 'Password harus minimal 8 karakter.',
+            'name.required' => 'Nama wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
         ];
     }
 }

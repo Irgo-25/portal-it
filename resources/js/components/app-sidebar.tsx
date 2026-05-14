@@ -2,8 +2,8 @@ import { Link } from '@inertiajs/react';
 import {
     Building2,
     Cog,
+    Folder,
     LayoutGrid,
-    ShieldCloseIcon,
     User2Icon,
     UserCircle,
 } from 'lucide-react';
@@ -25,6 +25,7 @@ import users from '@/routes/users';
 import type { NavItem, UserMenuItem, MasterDataMenuItem } from '@/types';
 import { NavMasterData } from './nav-master-data';
 import { NavUserManagement } from './nav-user-management';
+import categories from '@/routes/categories';
 
 const mainNavItems: NavItem[] = [
     {
@@ -56,6 +57,11 @@ const mainMasterDataItems: MasterDataMenuItem[] = [
                 title: 'Departement',
                 href: departements.index(),
                 icon: Building2,
+            },
+            {
+                title: 'Category',
+                href: categories.index(),
+                icon: Folder,
             },
         ],
     },

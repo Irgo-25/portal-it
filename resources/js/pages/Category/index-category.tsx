@@ -5,29 +5,30 @@ import { route } from 'ziggy-js';
 import CardConfirmation from '@/components/card-confirmation';
 import { DataTable } from '@/components/DataTable/data-table';
 import { Button } from '@/components/ui/button';
-import type { Departement } from '@/types';
-import { departementColumns } from './columns';
-import DepartementFormDialog from './departement-form-dialog';
+import type { Category } from '@/types';
+import CategoryFormDialog from './category-form-dialog';
+import { categoryColumns } from './columns';
 
 interface Props {
-    departements: {
-        data: Departement[];
+    categories: {
+        data: Category[];
         total: number;
         prev_page_url?: string;
         next_page_url?: string;
     };
 }
-export default function IndexDepartement({ departements }: Props) {
+export default function IndexCategory({ categories }: Props) {
     const [openForm, setOpenForm] = useState(false);
-    const [selectedDepartement, setSelectedDepartement] =
-        useState<Departement | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+        null,
+    );
 
     const [openDelete, setOpenDelete] = useState(false);
 
     const [loadingDelete, setLoadingDelete] = useState(false);
     // OPEN EDIT MODAL
-    const openCardEdit = (departement: Departement) => {
-        setSelectedDepartement(departement);
+    const openCardEdit = (category: Category) => {
+        setSelectedCategory(category);
         setOpenForm(true);
     };
 
@@ -36,8 +37,8 @@ export default function IndexDepartement({ departements }: Props) {
     OPEN DELETE MODAL
     =====================================
     */
-    const openCardDelete = (departement: Departement) => {
-        setSelectedDepartement(departement);
+    const openCardDelete = (category: Category) => {
+        setSelectedCategory(category);
         setOpenDelete(true);
     };
 
@@ -47,21 +48,21 @@ export default function IndexDepartement({ departements }: Props) {
     =====================================
     */
     const handleDelete = () => {
-        if (!selectedDepartement) {
+        if (!selectedCategory) {
             return;
         }
 
         setLoadingDelete(true);
 
         router.delete(
-            route('departements.destroy', selectedDepartement.id_departement),
+            route('categories.destroy', selectedCategory.id_category),
             {
                 preserveScroll: true,
 
                 onFinish: () => {
                     setLoadingDelete(false);
                     setOpenDelete(false);
-                    setSelectedDepartement(null);
+                    setSelectedCategory(null);
                 },
             },
         );
@@ -69,64 +70,64 @@ export default function IndexDepartement({ departements }: Props) {
 
     return (
         <>
-            <Head title="Departements" />
+            <Head title="Categorys" />
 
             <div className="p-4">
                 <div className="mb-4 flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">Manage Departement</h1>
+                    <h1 className="text-2xl font-bold">Manage Category</h1>
 
                     <Button
                         onClick={() => {
-                            setSelectedDepartement(null);
+                            setSelectedCategory(null);
                             setOpenForm(true);
                         }}
                     >
-                        New Departement
+                        New Category
                     </Button>
                 </div>
 
                 <DataTable
-                    columns={departementColumns({
+                    columns={categoryColumns({
                         openCardDelete,
                         openCardEdit,
                     })}
-                    data={departements.data}
-                    idKey="id_departement"
-                    pagination={departements}
-                    routeName="departements.index"
-                    bulkDeleteRoute="departements.bulk-delete"
+                    data={categories.data}
+                    pagination={categories}
+                    routeName="categories.index"
+                    bulkDeleteRoute="categories.bulk-delete"
+                    idKey="id_category"
                 />
                 {/* DELETE CONFIRMATION MODAL */}
-                {openDelete && selectedDepartement && (
+                {openDelete && selectedCategory && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
                         <CardConfirmation
-                            title="Delete Departement"
-                            description={`Are you sure you want to delete "${selectedDepartement.name}"? This action cannot be undone.`}
+                            title="Delete Category"
+                            description={`Are you sure you want to delete "${selectedCategory.name}"? This action cannot be undone.`}
                             confirmationText="Delete"
                             cancelText="Cancel"
                             loading={loadingDelete}
                             onConfirm={handleDelete}
                             onCancel={() => {
                                 setOpenDelete(false);
-                                setSelectedDepartement(null);
+                                setSelectedCategory(null);
                             }}
                         />
                     </div>
                 )}
             </div>
-            <DepartementFormDialog
+            <CategoryFormDialog
                 open={openForm}
                 onClose={() => setOpenForm(false)}
-                departement={selectedDepartement}
+                category={selectedCategory}
             />
         </>
     );
 }
-IndexDepartement.layout = {
+IndexCategory.layout = {
     breadcrumbs: [
         {
-            title: 'Departements',
-            href: route('departements.index'),
+            title: 'Categories',
+            href: route('categories.index'),
         },
     ],
 };

@@ -1,6 +1,7 @@
 'use-client';
 
 import { router } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react';
 import { route } from 'ziggy-js';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ interface DepartementFormDialogProps {
         name: string;
         code: string;
     } | null;
+    errors: Record<string, string | string[]>;
 }
 export default function DepartementFormDialog({
     open,
@@ -36,6 +38,10 @@ export default function DepartementFormDialog({
     });
 
     const [loading, setLoading] = useState(false);
+    const { errors: serverErrors } = usePage().props as {
+        errors: Record<string, string>;
+    };
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const resetForm = () => {
         if (departement) {
@@ -80,6 +86,9 @@ export default function DepartementFormDialog({
                         resetForm();
                         onClose();
                     },
+                    onError: () => {
+                        setLoading(false);
+                    },
                 },
             );
         } else {
@@ -90,8 +99,22 @@ export default function DepartementFormDialog({
                     resetForm();
                     onClose();
                 },
+                onError: () => {
+                    setLoading(false);
+                },
             });
         }
+    };
+
+    useEffect(() => {
+        setErrors(serverErrors);
+    }, [serverErrors]);
+
+    const handleCancel = () => {
+        resetForm();
+        setErrors({});
+        onClose();
+        setLoading(false);
     };
 
     return (
@@ -100,7 +123,7 @@ export default function DepartementFormDialog({
                 open={open}
                 onOpenChange={(value) => {
                     if (!value) {
-                        onClose();
+                        handleCancel();
                     }
                 }}
             >
@@ -121,6 +144,7 @@ export default function DepartementFormDialog({
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <Input
                             placeholder="Name"
+                            autoFocus
                             value={form.name}
                             onChange={(e) =>
                                 setForm({
@@ -128,7 +152,13 @@ export default function DepartementFormDialog({
                                     name: e.target.value,
                                 })
                             }
+                            aria-invalid={!!errors.name}
                         />
+                        {errors.name && (
+                            <p className="text-sm text-red-500">
+                                {errors.name}
+                            </p>
+                        )}
 
                         <Input
                             placeholder="Code Departement"
@@ -139,17 +169,15 @@ export default function DepartementFormDialog({
                                     code: e.target.value,
                                 })
                             }
+                            aria-invalid={!!errors.code}
                         />
+                        {errors.code && (
+                            <p className="text-sm text-red-500">
+                                {errors.code}
+                            </p>
+                        )}
 
                         <div className="flex justify-end gap-2">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={onClose}
-                            >
-                                Cancel
-                            </Button>
-
                             <Button type="submit" disabled={loading}>
                                 {loading ? (
                                     <Spinner className="h-5 w-5" />
@@ -158,6 +186,13 @@ export default function DepartementFormDialog({
                                 ) : (
                                     'Create'
                                 )}
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleCancel}
+                            >
+                                Cancel
                             </Button>
                         </div>
                     </form>

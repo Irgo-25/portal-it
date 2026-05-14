@@ -8,3 +8,4 @@ class StockTransaction extends Model
 {
     //
 }
+            

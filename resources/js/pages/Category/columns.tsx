@@ -10,29 +10,29 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export type Departement = {
-    id_departement: number;
+export type Category = {
+    id_category: number;
     name: string;
-    code: string;
+    description: string;
 };
 
-interface DepartementColumnsProps {
-    openCardDelete: (departement: Departement) => void;
-    openCardEdit: (departement: Departement) => void;
+interface CategoryColumnsProps {
+    openCardDelete: (category: Category) => void;
+    openCardEdit: (category: Category) => void;
 }
 
-export const departementColumns = ({
+export const categoryColumns = ({
     openCardDelete,
     openCardEdit,
-}: DepartementColumnsProps): ColumnDef<Departement>[] => [
+}: CategoryColumnsProps): ColumnDef<Category>[] => [
     {
         accessorKey: 'name',
-        header: 'Departement Name',
+        header: 'Category Name',
     },
 
     {
-        accessorKey: 'code',
-        header: 'Code',
+        accessorKey: 'description',
+        header: 'Description',
     },
 
     {
@@ -40,7 +40,7 @@ export const departementColumns = ({
         header: 'Actions',
 
         cell: ({ row }) => {
-            const departement = row.original;
+            const category = row.original;
 
             return (
                 <DropdownMenu>
@@ -56,7 +56,7 @@ export const departementColumns = ({
                     <DropdownMenuContent align="end">
                         {/* EDIT */}
                         <DropdownMenuItem
-                            onClick={() => openCardEdit(departement)}
+                            onClick={() => openCardEdit(category)}
                             className="cursor-pointer text-amber-600"
                         >
                             Edit
@@ -64,7 +64,7 @@ export const departementColumns = ({
 
                         {/* DELETE */}
                         <DropdownMenuItem
-                            onClick={() => openCardDelete(departement)}
+                            onClick={() => openCardDelete(category)}
                             className="cursor-pointer text-red-500"
                         >
                             Delete
