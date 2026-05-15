@@ -10,6 +10,17 @@ export type User = {
     [key: string]: unknown;
 };
 
+export type Item = {
+    id_item: number;
+    code: string;
+    name: string;
+    description: string;
+    id_category: number;
+    id_uom: number;
+    created_at: string;
+    updated_at: string;
+};
+
 export type Departement = {
     id_departement: number;
     name: string;
@@ -22,6 +33,14 @@ export type Category = {
     id_category: number;
     name: string;
     description: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type Uom = {
+    id_uom: number;
+    name: string;
+    symbol: string;
     created_at: string;
     updated_at: string;
 };

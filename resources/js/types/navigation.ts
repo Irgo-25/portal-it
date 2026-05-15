@@ -33,3 +33,13 @@ export type MasterDataMenuItem = {
         isActive?: boolean;
     }[];
 };
+export type StockMenuItem = {
+    title: string;
+    icon?: LucideIcon | null;
+    items: {
+        title: string;
+        href: NonNullable<InertiaLinkProps['href']>;
+        icon?: LucideIcon | null;
+        isActive?: boolean;
+    }[];
+};

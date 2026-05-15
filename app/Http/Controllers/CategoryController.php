@@ -22,7 +22,8 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $categories = $this->categoryService->view($request);
-        return Inertia::render('Category/index-category', compact('categories'));
+        $filters = $request->only(['search', 'perPage', 'sortBy', 'sortDirection']);
+        return Inertia::render('Category/index-category', compact('categories', 'filters'));
     }
 
     /**

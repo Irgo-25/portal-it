@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('stock_opnames', function (Blueprint $table) {
             $table->id('id_stock_opname');
             $table->string('code')->unique();
+            $table->foreignId('departement_id')->constrained('departements', 'id_departement')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->timestamp('date');
             $table->enum('status', ['draft', 'completed'])->default('draft');
-            $table->string('notes')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamp('opname_date');
             $table->timestamps();
         });

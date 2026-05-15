@@ -1,11 +1,15 @@
 import { Link } from '@inertiajs/react';
 import {
+    ArrowLeftRight,
     Building2,
     Cog,
     Folder,
     LayoutGrid,
+    Ruler,
+    StickyNote,
     User2Icon,
     UserCircle,
+    Warehouse,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
@@ -20,12 +24,19 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import departements from '@/routes/departements';
-import users from '@/routes/users';
-import type { NavItem, UserMenuItem, MasterDataMenuItem } from '@/types';
-import { NavMasterData } from './nav-master-data';
-import { NavUserManagement } from './nav-user-management';
 import categories from '@/routes/categories';
+import departements from '@/routes/departements';
+import uoms from '@/routes/uoms';
+import users from '@/routes/users';
+import type {
+    NavItem,
+    UserMenuItem,
+    MasterDataMenuItem,
+    StockMenuItem,
+} from '@/types';
+import { NavMasterData } from './nav-master-data';
+import { NavStock } from './nav-stock';
+import { NavUserManagement } from './nav-user-management';
 
 const mainNavItems: NavItem[] = [
     {
@@ -63,6 +74,30 @@ const mainMasterDataItems: MasterDataMenuItem[] = [
                 href: categories.index(),
                 icon: Folder,
             },
+            {
+                title: 'Unit of Measurement',
+                href: uoms.index(),
+                icon: Ruler,
+            },
+        ],
+    },
+];
+
+const mainMenuItems: StockMenuItem[] = [
+    {
+        title: 'Stock Management',
+        icon: Warehouse,
+        items: [
+            {
+                title: 'Stock Items',
+                href: '#',
+                icon: StickyNote,
+            },
+            {
+                title: 'Stock Movement',
+                href: '#',
+                icon: ArrowLeftRight,
+            },
         ],
     },
 ];
@@ -84,6 +119,7 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <NavMain items={mainNavItems} />
+                <NavStock items={mainMenuItems} />
                 <NavMasterData items={mainMasterDataItems} />
                 <NavUserManagement items={mainNavUserManagementItems} />
             </SidebarContent>
