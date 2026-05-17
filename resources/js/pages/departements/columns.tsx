@@ -10,11 +10,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export type Departement = {
-    id_departement: number;
-    name: string;
-    code: string;
-};
+import type { Departement } from '@/types';
 
 interface DepartementColumnsProps {
     openCardDelete: (departement: Departement) => void;

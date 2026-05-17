@@ -10,12 +10,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export type User = {
-    id: number;
-    name: string;
-    email: string;
-    created_at: string;
-};
+import type { User } from '@/types';
 
 interface UserColumnsProps {
     openCardDelete: (user: User) => void;

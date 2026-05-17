@@ -37,6 +37,7 @@ import type {
 import { NavMasterData } from './nav-master-data';
 import { NavStock } from './nav-stock';
 import { NavUserManagement } from './nav-user-management';
+import items from '@/routes/items';
 
 const mainNavItems: NavItem[] = [
     {
@@ -90,7 +91,7 @@ const mainMenuItems: StockMenuItem[] = [
         items: [
             {
                 title: 'Stock Items',
-                href: '#',
+                href: items.index(),
                 icon: StickyNote,
             },
             {

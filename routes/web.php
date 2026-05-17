@@ -18,6 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('users', UserController::class);
     Route::post('/users/bulk-delete',[UserController::class, 'bulkDelete'])->name('users.bulk-delete');
 
+    // Item
     Route::resource('items', ItemController::class);
     Route::post('/items/bulk-delete',[ItemController::class, 'bulkDelete'])->name('items.bulk-delete');
 

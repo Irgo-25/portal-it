@@ -24,4 +24,12 @@ class Item extends Model
     {
         return $this->belongsTo(Departement::class, 'departement_id', 'id_departement');
     }
+    public function itemUoms()
+    {
+        return $this->hasMany(ItemUom::class, 'item_id', 'id_item');
+    }
+    public function baseUom()
+    {
+        return $this->hasOne(ItemUom::class, 'item_id', 'id_item')->where('is_base', true);
+    }
 }

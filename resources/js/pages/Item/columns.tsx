@@ -1,34 +1,47 @@
 'use client';
 
+import { router } from '@inertiajs/react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
-
+import { route } from 'ziggy-js';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import type { Item } from '@/types';
 
-import type { Uom } from '@/types';
-
-interface UomColumnsProps {
-    openCardDelete: (uom: Uom) => void;
-    openCardEdit: (uom: Uom) => void;
+interface ItemColumnsProps {
+    openCardDelete: (item: Item) => void;
 }
 
-export const uomColumns = ({
+export const itemColumns = ({
     openCardDelete,
-    openCardEdit,
-}: UomColumnsProps): ColumnDef<Uom>[] => [
+}: ItemColumnsProps): ColumnDef<Item>[] => [
     {
         accessorKey: 'name',
-        header: 'Uom Name',
+        header: 'Item Name',
     },
 
     {
-        accessorKey: 'symbol',
-        header: 'Symbol',
+        accessorKey: 'code',
+        header: 'Code Item',
+    },
+
+    {
+        accessorKey: 'category.name',
+        header: 'Category',
+    },
+
+    {
+        accessorKey: 'departement.name',
+        header: 'Departement',
+    },
+
+    {
+        accessorKey: 'stock',
+        header: 'Stock',
     },
 
     {
@@ -36,7 +49,7 @@ export const uomColumns = ({
         header: 'Actions',
 
         cell: ({ row }) => {
-            const uom = row.original;
+            const item = row.original;
 
             return (
                 <DropdownMenu>
@@ -52,15 +65,16 @@ export const uomColumns = ({
                     <DropdownMenuContent align="end">
                         {/* EDIT */}
                         <DropdownMenuItem
-                            onClick={() => openCardEdit(uom)}
-                            className="cursor-pointer text-amber-600"
+                            onClick={() =>
+                                router.visit(route('items.edit', item.id_item))
+                            }
                         >
                             Edit
                         </DropdownMenuItem>
 
                         {/* DELETE */}
                         <DropdownMenuItem
-                            onClick={() => openCardDelete(uom)}
+                            onClick={() => openCardDelete(item)}
                             className="cursor-pointer text-red-500"
                         >
                             Delete

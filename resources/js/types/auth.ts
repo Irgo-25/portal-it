@@ -14,9 +14,12 @@ export type Item = {
     id_item: number;
     code: string;
     name: string;
-    description: string;
-    id_category: number;
-    id_uom: number;
+    category_id: number;
+    departement_id: number;
+    stock: number;
+    category?: Category;
+    departement?: Departement;
+    item_uoms: ItemUom[];
     created_at: string;
     updated_at: string;
 };
@@ -44,6 +47,21 @@ export type Uom = {
     created_at: string;
     updated_at: string;
 };
+export type ItemUom = {
+    id_item_uom?: number;
+    uom_id: string;
+    is_base: boolean;
+    conversion_factor: number | string;
+    uom?: Uom;
+};
+
+export interface ItemUomData {
+    id?: number;
+    uom_id: string;
+    is_base: boolean;
+    conversion_factor: number | string;
+    uom?: Uom;
+}
 
 export type Auth = {
     user: User;

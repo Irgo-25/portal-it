@@ -2,16 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Item\ItemStore;
+use App\Models\Category;
+use App\Models\Departement;
+use App\Models\Uom;
+use App\Services\ItemService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ItemController extends Controller
 {
+    protected ItemService $itemService;
+    public function __construct(ItemService $itemService)
+    {
+        $this->itemService = $itemService;
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+       $items = $this->itemService->view($request);
+       $filters = $request->only(['search', 'perPage', 'sortBy', 'sortDirection']);
+       return Inertia::render('Item/index-item', compact('items', 'filters'));
     }
 
     /**
@@ -19,15 +32,25 @@ class ItemController extends Controller
      */
     public function create()
     {
-        //
+        $code = $this->itemService->generateCode();
+        $categories = Category::select('id_category as id', 'name')->get();
+        $departements = Departement::select('id_departement as id', 'name', 'code')->get();
+        $uoms = Uom::select('id_uom as id', 'name', 'symbol')->get();
+        return Inertia::render('Item/create-item', compact('code', 'categories', 'departements', 'uoms'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ItemStore $request)
     {
-        //
+        $data = $request->validated();
+        $baseUomCount = collect($data['uoms'])->where('is_base', true)->count();
+        if ($baseUomCount !== 1) {
+            return back()->withErrors(['uoms' => 'Harus ada tepat satu satuan dasar.']);
+        }
+        $this->itemService->create($data);
+        return redirect()->route('items.index')->with('success', 'Item created successfully.');
     }
 
     /**
@@ -43,7 +66,7 @@ class ItemController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return Inertia::render('Item/edit-item');
     }
 
     /**

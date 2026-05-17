@@ -17,8 +17,7 @@ return new class extends Migration
             $table->foreignId('departement_id')->constrained('departements','id_departement')->onDelete('cascade');
             $table->string('code')->unique();
             $table->string('name');
-            $table->decimal('stock',15,4)->default(0);
-            $table->string('description')->nullable();
+            $table->decimal('stock',15,2)->default(0);
             $table->timestamps();
         });
     }

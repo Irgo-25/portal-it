@@ -10,11 +10,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export type Category = {
-    id_category: number;
-    name: string;
-    description: string;
-};
+import type { Category } from '@/types';
 
 interface CategoryColumnsProps {
     openCardDelete: (category: Category) => void;

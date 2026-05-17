@@ -16,4 +16,13 @@ class ItemUom extends Model
         'is_base' => 'boolean',
         'conversion_factor' => 'decimal:4',
     ];
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'item_id', 'id_item');
+    }
+    public function uom()
+    {
+        return $this->belongsTo(Uom::class, 'uom_id', 'id_uom');
+    }
 }
