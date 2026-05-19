@@ -55,14 +55,6 @@ export type ItemUom = {
     uom?: Uom;
 };
 
-export interface ItemUomData {
-    id?: number;
-    uom_id: string;
-    is_base: boolean;
-    conversion_factor: number | string;
-    uom?: Uom;
-}
-
 export type Auth = {
     user: User;
 };

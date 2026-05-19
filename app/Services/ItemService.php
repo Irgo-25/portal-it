@@ -44,8 +44,8 @@ class ItemService
             : 'name';
 
         $sortDirection = $request->get('sortDirection') === 'desc'
-            ? 'desc'
-            : 'asc';
+            ? 'asc'
+            : 'desc';
 
         return Item::query()
             ->when($search, function ($query) use ($search) {
