@@ -23,15 +23,29 @@ class ItemStore extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'code' => ['required', 'string', 'max:255', 'unique:items'],
-            'category_id' => ['required', 'exists:categories,id_category'],
-            'departement_id' => ['required', 'exists:departements,id_departement'],
-            'uoms'=> ['required', 'array', 'min:1'],
-            'uoms.*.uom_id' => ['required', 'exists:uoms,id_uom', 'distinct'],
-            'uoms.*.is_base' => ['required', 'boolean'],
-            'uoms.*.conversion_factor' => ['required', 'numeric', 'min:0.01'],
+            'code'                     => 'required|string|unique:items,code',
+            'name'                     => 'required|string|max:255',
+            'category_id'              => 'required|exists:categories,id_category',
+            'departement_id'           => 'required|exists:departements,id_departement',
+            'uoms'                     => 'required|array|min:1',
+            'uoms.*.uom_id'            => 'required|exists:uoms,id_uom',
+            'uoms.*.is_base'           => 'required|boolean',
+            'uoms.*.conversion_factor' => 'required|numeric|min:0.0001',
         ];
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $uoms = $this->input('uoms', []);
+            $baseCount = collect($uoms)->where('is_base', true)->count();
+
+            if ($baseCount === 0) {
+                $validator->errors()->add('uoms', 'Harus ada satu satuan dasar (base UOM).');
+            } elseif ($baseCount > 1) {
+                $validator->errors()->add('uoms', 'Hanya boleh ada satu satuan dasar (base UOM).');
+            }
+        });
     }
     public function messages(): array
     {

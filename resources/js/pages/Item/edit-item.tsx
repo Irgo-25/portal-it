@@ -1,11 +1,10 @@
 import { Head } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import { Card, CardContent } from '@/components/ui/card';
-
 import type { Category, Departement, Item, Uom } from '@/types';
 import ItemForm from './form-item';
 
-interface editItemProps {
+interface EditItemProps {
     item: Item;
     categories: Category[];
     departements: Departement[];
@@ -17,7 +16,7 @@ export default function EditItem({
     categories,
     departements,
     uoms,
-}: editItemProps) {
+}: EditItemProps) {
     return (
         <div className="p-4">
             <Head title="Update Item" />
@@ -25,18 +24,17 @@ export default function EditItem({
                 <CardContent>
                     <ItemForm
                         mode="edit"
+                        itemId={item.id_item}
                         initialData={{
-                            item: item.id_item,
+                            code: item.code,
                             name: item.name,
-                            category_id: item.category_id,
-                            departement_id: item.departement_id,
-                            uoms: [
-                                {
-                                    uom_id: '',
-                                    is_base: true,
-                                    conversion_factor: 1,
-                                },
-                            ],
+                            category_id: String(item.category_id),
+                            departement_id: String(item.departement_id),
+                            uoms: (item.item_uoms ?? []).map((uom) => ({
+                                uom_id: String(uom.uom_id),
+                                is_base: uom.is_base,
+                                conversion_factor: uom.conversion_factor,
+                            })),
                         }}
                         categories={categories}
                         departements={departements}
@@ -56,7 +54,7 @@ EditItem.layout = {
         },
         {
             title: 'Edit Item',
-            href: route('items.edit', { item: item.id }),
+            href: route('items.edit', { id: 0 }),
         },
     ],
 };

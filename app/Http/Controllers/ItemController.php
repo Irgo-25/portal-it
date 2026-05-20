@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Item\ItemStore;
+use App\Http\Requests\Item\ItemUpdate;
 use App\Models\Category;
 use App\Models\Departement;
+use App\Models\Item;
 use App\Models\Uom;
 use App\Services\ItemService;
 use Illuminate\Http\Request;
@@ -22,9 +24,9 @@ class ItemController extends Controller
      */
     public function index(Request $request)
     {
-       $items = $this->itemService->view($request);
-       $filters = $request->only(['search', 'perPage', 'sortBy', 'sortDirection']);
-       return Inertia::render('Item/index-item', compact('items', 'filters'));
+        $items = $this->itemService->view($request);
+        $filters = $request->only(['search', 'perPage', 'sortBy', 'sortDirection']);
+        return Inertia::render('Item/index-item', compact('items', 'filters'));
     }
 
     /**
@@ -64,17 +66,28 @@ class ItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Item $item)
     {
-        return Inertia::render('Item/edit-item');
+        $item->load(['itemUoms.uom']);
+
+        return Inertia::render('Item/edit-item', [
+            'item'         => $item,
+            'categories'   => Category::all(),
+            'departements' => Departement::all(),
+            'uoms'         => Uom::all(),
+        ]);
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ItemUpdate $request, Item $item)
     {
-        //
+        $this->itemService->update($item, $request->validated());
+
+        return redirect()->route('items.index')
+            ->with('success', 'Item berhasil diperbarui.');
     }
 
     /**

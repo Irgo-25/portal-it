@@ -68,6 +68,7 @@ export const itemColumns = ({
                             onClick={() =>
                                 router.visit(route('items.edit', item.id_item))
                             }
+                            className="cursor-pointer text-amber-500"
                         >
                             Edit
                         </DropdownMenuItem>

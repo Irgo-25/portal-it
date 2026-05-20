@@ -95,4 +95,34 @@ class ItemService
             return $item;
         });
     }
+public function update(Item $item, array $data): Item
+    {
+        return DB::transaction(function () use ($item, $data) {
+            $item->update([
+                'code'           => $data['code'],
+                'name'           => $data['name'],
+                'departement_id' => $data['departement_id'],
+                'category_id'    => $data['category_id'],
+            ]);
+
+            $newUomIds = collect($data['uoms'])->pluck('uom_id')->toArray();
+
+            // Hapus UOM yang tidak ada di list baru
+            $item->itemUoms()->whereNotIn('uom_id', $newUomIds)->delete();
+
+            // Update atau buat UOM baru
+            foreach ($data['uoms'] as $uom) {
+                $item->itemUoms()->updateOrCreate(
+                    ['uom_id' => $uom['uom_id']],
+                    [
+                        'is_base'           => $uom['is_base'],
+                        'conversion_factor' => $uom['is_base'] ? 1 : $uom['conversion_factor'],
+                    ]
+                );
+            }
+
+            return $item;
+        });
+    }
+
 }

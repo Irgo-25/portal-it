@@ -79,7 +79,7 @@ export default function ItemForm({
     const updateUom = (
         index: number,
         field: keyof ItemUom,
-        value: string | boolean,
+        value: string | boolean | number,
     ) => {
         const updatedUoms = [...data.uoms];
         updatedUoms[index] = { ...updatedUoms[index], [field]: value };
@@ -147,9 +147,9 @@ export default function ItemForm({
                             </SelectTrigger>
                             <SelectContent>
                                 {categories.map((category) => (
-                                    <SelectGroup key={category.id}>
+                                    <SelectGroup key={category.id_category}>
                                         <SelectItem
-                                            value={category.id.toString()}
+                                            value={String(category.id_category)}
                                         >
                                             {category.name}
                                         </SelectItem>
@@ -178,9 +178,11 @@ export default function ItemForm({
                             </SelectTrigger>
                             <SelectContent>
                                 {departements.map((departement) => (
-                                    <SelectGroup key={departement.id}>
+                                    <SelectGroup
+                                        key={departement.id_departement}
+                                    >
                                         <SelectItem
-                                            value={departement.id.toString()}
+                                            value={String(departement.id_departement)}
                                         >
                                             {departement.name}
                                         </SelectItem>
@@ -235,15 +237,15 @@ export default function ItemForm({
                                                 .filter(
                                                     (u) =>
                                                         !usedUomIds.includes(
-                                                            String(u.id),
+                                                            String(u.id_uom),
                                                         ) ||
-                                                        String(u.id) ===
+                                                        String(u.id_uom) ===
                                                             uomRow.uom_id,
                                                 )
                                                 .map((u) => (
                                                     <SelectItem
-                                                        key={u.id}
-                                                        value={String(u.id)}
+                                                        key={u.id_uom}
+                                                        value={String(u.id_uom)}
                                                     >
                                                         {u.name} ({u.symbol})
                                                     </SelectItem>
