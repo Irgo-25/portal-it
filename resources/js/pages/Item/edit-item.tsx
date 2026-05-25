@@ -1,20 +1,18 @@
 import { Head } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import { Card, CardContent } from '@/components/ui/card';
-import type { Category, Departement, Item, Uom } from '@/types';
+import type { Category, Item, Uom } from '@/types';
 import ItemForm from './form-item';
 
 interface EditItemProps {
     item: Item;
     categories: Category[];
-    departements: Departement[];
     uoms: Uom[];
 }
 
 export default function EditItem({
     item,
     categories,
-    departements,
     uoms,
 }: EditItemProps) {
     return (
@@ -29,7 +27,6 @@ export default function EditItem({
                             code: item.code,
                             name: item.name,
                             category_id: String(item.category_id),
-                            departement_id: String(item.departement_id),
                             uoms: (item.item_uoms ?? []).map((uom) => ({
                                 uom_id: String(uom.uom_id),
                                 is_base: uom.is_base,
@@ -37,7 +34,6 @@ export default function EditItem({
                             })),
                         }}
                         categories={categories}
-                        departements={departements}
                         uoms={uoms}
                     />
                 </CardContent>
@@ -54,7 +50,7 @@ EditItem.layout = {
         },
         {
             title: 'Edit Item',
-            href: route('items.edit', { id: 0 }),
+            href: route('items.edit'),
         },
     ],
 };

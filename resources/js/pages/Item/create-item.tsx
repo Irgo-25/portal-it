@@ -2,20 +2,18 @@ import { Head } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 import { Card, CardContent } from '@/components/ui/card';
 
-import type { Category, Departement, Uom } from '@/types';
+import type { Category, Uom } from '@/types';
 import ItemForm from './form-item';
 
 interface createItemProps {
     code: string;
     categories: Category[];
-    departements: Departement[];
     uoms: Uom[];
 }
 
 export default function CreateItem({
     code,
     categories,
-    departements,
     uoms,
 }: createItemProps) {
     return (
@@ -29,7 +27,6 @@ export default function CreateItem({
                             code,
                             name: '',
                             category_id: '',
-                            departement_id: '',
                             uoms: [
                                 {
                                     uom_id: '',
@@ -39,7 +36,6 @@ export default function CreateItem({
                             ],
                         }}
                         categories={categories}
-                        departements={departements}
                         uoms={uoms}
                     />
                 </CardContent>

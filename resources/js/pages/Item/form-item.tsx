@@ -19,13 +19,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import type { Category, Departement, Uom, ItemUom } from '@/types';
+import type { Category, Uom, ItemUom } from '@/types';
 
 interface ItemFormData {
     code: string;
     name: string;
     category_id: string;
-    departement_id: string;
     uoms: ItemUom[];
 }
 
@@ -34,7 +33,6 @@ interface ItemFormProps {
     initialData: ItemFormData;
     itemId?: number;
     categories: Category[];
-    departements: Departement[];
     uoms: Uom[];
 }
 
@@ -43,7 +41,6 @@ export default function ItemForm({
     initialData,
     itemId,
     categories,
-    departements,
     uoms,
 }: ItemFormProps) {
     const { data, setData, post, put, errors, processing } =
@@ -160,39 +157,6 @@ export default function ItemForm({
                         {errors.category_id && (
                             <p className="text-sm text-red-500">
                                 {errors.category_id}
-                            </p>
-                        )}
-                    </Field>
-                    <Field>
-                        <FieldLabel htmlFor="departement_id">
-                            Departement
-                        </FieldLabel>
-                        <Select
-                            value={data.departement_id}
-                            onValueChange={(value) =>
-                                setData('departement_id', value)
-                            }
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a departement" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {departements.map((departement) => (
-                                    <SelectGroup
-                                        key={departement.id_departement}
-                                    >
-                                        <SelectItem
-                                            value={String(departement.id_departement)}
-                                        >
-                                            {departement.name}
-                                        </SelectItem>
-                                    </SelectGroup>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.departement_id && (
-                            <p className="text-sm text-red-500">
-                                {errors.departement_id}
                             </p>
                         )}
                     </Field>

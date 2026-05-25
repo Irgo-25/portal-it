@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id('id_item');
             $table->foreignId('category_id')->constrained('categories','id_category')->onDelete('cascade');
-            $table->foreignId('departement_id')->constrained('departements','id_departement')->onDelete('cascade');
             $table->string('code')->unique();
             $table->string('name');
             $table->decimal('stock',15,2)->default(0);

@@ -15,10 +15,8 @@ export type Item = {
     code: string;
     name: string;
     category_id: number;
-    departement_id: number;
     stock: number;
     category?: Category;
-    departement?: Departement;
     item_uoms: ItemUom[];
     created_at: string;
     updated_at: string;
