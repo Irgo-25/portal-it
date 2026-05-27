@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained('items','id_item')->onDelete('cascade');
             $table->foreignId('uom_id')->constrained('uoms', 'id_uom')->onDelete('cascade');
             $table->boolean('is_base')->default(false);
-            $table->decimal('conversion_factor',15,4)->default(1);
+            $table->integer('conversion_factor')->default(1);
             $table->timestamps();
             $table->unique(['item_id', 'uom_id']);
         });

@@ -10,11 +10,7 @@ interface EditItemProps {
     uoms: Uom[];
 }
 
-export default function EditItem({
-    item,
-    categories,
-    uoms,
-}: EditItemProps) {
+export default function EditItem({ item, categories, uoms }: EditItemProps) {
     return (
         <div className="p-4">
             <Head title="Update Item" />
@@ -42,15 +38,12 @@ export default function EditItem({
     );
 }
 
-EditItem.layout = {
+EditItem.layout = (page: React.ReactElement<EditItemProps>) => ({
     breadcrumbs: [
-        {
-            title: 'Items',
-            href: route('items.index'),
-        },
+        { title: 'Items', href: route('items.index') },
         {
             title: 'Edit Item',
-            href: route('items.edit'),
+            href: route('items.edit', { item: page.props?.item?.id_item ?? 0 }),
         },
     ],
-};
+});

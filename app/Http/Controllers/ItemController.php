@@ -35,10 +35,9 @@ class ItemController extends Controller
     public function create()
     {
         $code = $this->itemService->generateCode();
-        $categories = Category::select('id_category as id', 'name')->get();
-        $departements = Departement::select('id_departement as id', 'name', 'code')->get();
-        $uoms = Uom::select('id_uom as id', 'name', 'symbol')->get();
-        return Inertia::render('Item/create-item', compact('code', 'categories', 'departements', 'uoms'));
+        $categories = Category::select('id_category as id_category', 'name')->get();
+        $uoms = Uom::select('id_uom as id_uom', 'name', 'symbol')->get();
+        return Inertia::render('Item/create-item', compact('code', 'categories', 'uoms'));
     }
 
     /**
@@ -93,8 +92,14 @@ class ItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Item $item)
     {
-        //
+        $this->itemService->destroy($item);
+        return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
+    }
+    public function bulkDelete(Request $request)
+    {
+        $this->itemService->bulkDelete($request);
+        return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
     }
 }

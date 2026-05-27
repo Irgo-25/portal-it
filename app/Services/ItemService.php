@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Item;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ItemService
@@ -31,7 +32,6 @@ class ItemService
 
             'name',
             'code',
-            'departement_id',
             'category_id',
             'stock',
         ];
@@ -54,7 +54,7 @@ class ItemService
                         ->orWhere('code', 'like', "%{$search}%");
                 });
             })
-            ->with(['category', 'departement'])
+            ->with(['category'])
             ->orderBy($sortBy, $sortDirection)
             ->paginate($perPage)
             ->withQueryString()
@@ -65,12 +65,8 @@ class ItemService
                 'category_id' => $item->category_id,
                 'departement_id' => $item->departement_id,
                 'category' => $item->category?[
-                    'id' => $item->category->id_category,
+                    'id_category' => $item->category->id_category,
                     'name' => $item->category->name,
-                ]: null,
-                'departement' => $item->departement?[
-                    'id' => $item->departement->id_departement,
-                    'name' => $item->departement->name,
                 ]: null,
                 'stock' => (int) $item->stock,
             ]);
@@ -81,7 +77,6 @@ class ItemService
             $item = Item::create([
                 'code'=> $data['code'],
                 'name' => $data['name'],
-                'departement_id' => $data['departement_id'],
                 'category_id' => $data['category_id'],
                 'stock' => 0,
             ]);
@@ -101,7 +96,6 @@ public function update(Item $item, array $data): Item
             $item->update([
                 'code'           => $data['code'],
                 'name'           => $data['name'],
-                'departement_id' => $data['departement_id'],
                 'category_id'    => $data['category_id'],
             ]);
 
@@ -125,4 +119,15 @@ public function update(Item $item, array $data): Item
         });
     }
 
+    public function destroy(Item $item)
+    {
+        return $item->delete();
+    }
+    public function bulkDelete(Request $request)
+    {
+        $id_items = $request->ids;
+        Item::whereIn('id_item', $id_items)->delete();
+    }
+
 }
+

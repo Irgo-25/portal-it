@@ -35,11 +35,6 @@ export const itemColumns = ({
     },
 
     {
-        accessorKey: 'departement.name',
-        header: 'Departement',
-    },
-
-    {
         accessorKey: 'stock',
         header: 'Stock',
     },

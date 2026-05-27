@@ -14,7 +14,6 @@ import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
-    SelectGroup,
     SelectItem,
     SelectTrigger,
     SelectValue,
@@ -144,13 +143,12 @@ export default function ItemForm({
                             </SelectTrigger>
                             <SelectContent>
                                 {categories.map((category) => (
-                                    <SelectGroup key={category.id_category}>
-                                        <SelectItem
-                                            value={String(category.id_category)}
-                                        >
-                                            {category.name}
-                                        </SelectItem>
-                                    </SelectGroup>
+                                    <SelectItem
+                                        key={category.id_category}
+                                        value={String(category.id_category)}
+                                    >
+                                        {category.name}
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
@@ -220,14 +218,16 @@ export default function ItemForm({
                                     {/* Conversion Factor */}
                                     <Input
                                         type="number"
-                                        min="0.0001"
-                                        step="0.0001"
+                                        min="1"
+                                        step="1"
                                         placeholder="1"
                                         disabled={uomRow.is_base}
                                         value={
                                             uomRow.is_base
                                                 ? 1
-                                                : uomRow.conversion_factor
+                                                : Number(
+                                                      uomRow.conversion_factor,
+                                                  )
                                         }
                                         onChange={(e) =>
                                             updateUom(

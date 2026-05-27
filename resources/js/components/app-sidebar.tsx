@@ -26,6 +26,8 @@ import {
 import { dashboard } from '@/routes';
 import categories from '@/routes/categories';
 import departements from '@/routes/departements';
+import itemTransaction from '@/routes/item-transactions';
+import items from '@/routes/items';
 import uoms from '@/routes/uoms';
 import users from '@/routes/users';
 import type {
@@ -37,7 +39,6 @@ import type {
 import { NavMasterData } from './nav-master-data';
 import { NavStock } from './nav-stock';
 import { NavUserManagement } from './nav-user-management';
-import items from '@/routes/items';
 
 const mainNavItems: NavItem[] = [
     {
@@ -95,8 +96,8 @@ const mainMenuItems: StockMenuItem[] = [
                 icon: StickyNote,
             },
             {
-                title: 'Stock Movement',
-                href: '#',
+                title: 'Stock Transactions',
+                href: itemTransaction.index(),
                 icon: ArrowLeftRight,
             },
         ],

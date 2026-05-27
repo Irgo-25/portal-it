@@ -18,9 +18,9 @@ return new class extends Migration
             $table->foreignId('departement_id')->constrained('departements', 'id_departement')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->enum('type', ['in', 'out']);
-            $table->decimal('quantity',15,4)->default(0);
-            $table->decimal('conversion_factor',15,4)->default(1);
-            $table->decimal('base_quantity',15,4)->default(0);
+            $table->integer('quantity')->default(0);
+            $table->integer('conversion_factor')->default(1);
+            $table->integer('base_quantity')->default(0);
             $table->timestamp('transaction_date');
             $table->timestamps();
 
