@@ -12,7 +12,7 @@ class ItemTransactionController extends Controller
      */
     public function index()
     {
-        return Inertia::render('ItemTransactions/index-item-transactions');
+        return Inertia::render('ItemTransactions/index-item-transaction');
     }
 
     /**
@@ -20,7 +20,7 @@ class ItemTransactionController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('ItemTransactions/create-item-transaction');
     }
 
     /**

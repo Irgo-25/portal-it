@@ -95,8 +95,8 @@ export default function ItemForm({
                 </FieldLegend>
                 <FieldDescription>
                     {isEditMode
-                        ? 'Update the details of your item below.'
-                        : 'Fill in the details of your new item below.'}
+                        ? 'Ubah detail item di bawah ini.'
+                        : 'Tambahkan detail item di bawah ini.'}
                 </FieldDescription>
                 <FieldGroup className="grid grid-cols-2">
                     <Field>

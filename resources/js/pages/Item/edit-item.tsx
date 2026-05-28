@@ -38,12 +38,11 @@ export default function EditItem({ item, categories, uoms }: EditItemProps) {
     );
 }
 
-EditItem.layout = (page: React.ReactElement<EditItemProps>) => ({
+EditItem.layout = () => ({
     breadcrumbs: [
         { title: 'Items', href: route('items.index') },
         {
             title: 'Edit Item',
-            href: route('items.edit', { item: page.props?.item?.id_item ?? 0 }),
         },
     ],
 });
