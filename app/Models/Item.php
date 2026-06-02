@@ -10,10 +10,7 @@ class Item extends Model
     protected $primaryKey = 'id_item';
 
     protected $fillable = [
-        'code', 'name', 'stock', 'description', 'category_id', 'departement_id'
-    ];
-    protected $casts = [
-        'stock' => 'decimal:4',
+        'item_code', 'name', 'stock', 'description', 'category_id', 'departement_id'
     ];
     
     public function category()

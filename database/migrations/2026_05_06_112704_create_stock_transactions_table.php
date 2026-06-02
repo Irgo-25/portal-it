@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('stock_transactions', function (Blueprint $table) {
             $table->id('id_stock_transaction');
+            $table->string('transaction_code')->unique();
             $table->foreignId('item_id')->constrained('items', 'id_item')->onDelete('cascade');
             $table->foreignId('uom_id')->constrained('uoms', 'id_uom')->onDelete('restrict');
             $table->foreignId('departement_id')->constrained('departements', 'id_departement')->onDelete('cascade');

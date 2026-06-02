@@ -6,13 +6,13 @@ import type { Category, Uom } from '@/types';
 import ItemForm from './form-item';
 
 interface createItemProps {
-    code: string;
+    item_code: string;
     categories: Category[];
     uoms: Uom[];
 }
 
 export default function CreateItem({
-    code,
+    item_code,
     categories,
     uoms,
 }: createItemProps) {
@@ -24,7 +24,7 @@ export default function CreateItem({
                     <ItemForm
                         mode="create"
                         initialData={{
-                            code,
+                            item_code,
                             name: '',
                             category_id: '',
                             uoms: [

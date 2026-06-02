@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id('id_item');
+            $table->string('item_code')->unique();
             $table->foreignId('category_id')->constrained('categories','id_category')->onDelete('cascade');
-            $table->string('code')->unique();
             $table->string('name');
             $table->integer('stock')->default(0);
             $table->timestamps();

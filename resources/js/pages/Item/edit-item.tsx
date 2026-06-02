@@ -20,7 +20,7 @@ export default function EditItem({ item, categories, uoms }: EditItemProps) {
                         mode="edit"
                         itemId={item.id_item}
                         initialData={{
-                            code: item.code,
+                            item_code: item.item_code,
                             name: item.name,
                             category_id: String(item.category_id),
                             uoms: (item.item_uoms ?? []).map((uom) => ({

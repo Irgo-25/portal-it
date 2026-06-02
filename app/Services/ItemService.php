@@ -18,8 +18,8 @@ class ItemService
 
     public function generateCode()
     {
-        $last = Item::orderBy('code', 'desc')->first();
-        $number = $last ? (int) substr($last->code, 4) : 0;
+        $last = Item::orderBy('item_code', 'desc')->first();
+        $number = $last ? (int) substr($last->item_code, 4) : 0;
         return 'ITM-' . str_pad($number + 1, 5, '0', STR_PAD_LEFT);
     }
 
@@ -61,7 +61,7 @@ class ItemService
             ->through(fn($item) => [
                 'id_item' => $item->id_item,
                 'name' => $item->name,
-                'code' => $item->code,
+                'item_code' => $item->item_code,
                 'category_id' => $item->category_id,
                 'departement_id' => $item->departement_id,
                 'category' => $item->category?[
@@ -75,7 +75,7 @@ class ItemService
     {
         return DB::transaction(function () use ($data) {
             $item = Item::create([
-                'code'=> $data['code'],
+                'item_code' => $data['item_code'],
                 'name' => $data['name'],
                 'category_id' => $data['category_id'],
                 'stock' => 0,
@@ -94,7 +94,6 @@ public function update(Item $item, array $data): Item
     {
         return DB::transaction(function () use ($item, $data) {
             $item->update([
-                'code'           => $data['code'],
                 'name'           => $data['name'],
                 'category_id'    => $data['category_id'],
             ]);

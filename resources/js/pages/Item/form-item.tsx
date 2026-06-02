@@ -21,7 +21,7 @@ import {
 import type { Category, Uom, ItemUom } from '@/types';
 
 interface ItemFormData {
-    code: string;
+    item_code: string;
     name: string;
     category_id: string;
     uoms: ItemUom[];
@@ -104,7 +104,7 @@ export default function ItemForm({
                         <Input
                             id="code"
                             disabled
-                            value={data.code || 'AUTO-GENERATED'}
+                            value={data.item_code || 'AUTO-GENERATED'}
                         />
                     </Field>
                     <Field>

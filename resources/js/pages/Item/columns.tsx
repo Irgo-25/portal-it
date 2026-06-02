@@ -25,8 +25,8 @@ export const itemColumns = ({
     },
 
     {
-        accessorKey: 'code',
-        header: 'Code Item',
+        accessorKey: 'item_code',
+        header: 'Item Code',
     },
 
     {

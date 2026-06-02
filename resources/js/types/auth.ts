@@ -12,7 +12,7 @@ export type User = {
 
 export type Item = {
     id_item: number;
-    code: string;
+    item_code: string;
     name: string;
     category_id: number;
     stock: number;

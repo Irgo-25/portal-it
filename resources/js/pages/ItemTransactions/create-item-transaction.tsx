@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 export default function CreateItemTransaction() {
     return (
         <div className="p-4">
-            <Head title="Create Item" />
+            <Head title="Create Item Transaction" />
             <Card className="mx-auto w-full">
                 <CardContent></CardContent>
             </Card>

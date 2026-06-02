@@ -34,10 +34,10 @@ class ItemController extends Controller
      */
     public function create()
     {
-        $code = $this->itemService->generateCode();
+        $item_code = $this->itemService->generateCode();
         $categories = Category::select('id_category as id_category', 'name')->get();
         $uoms = Uom::select('id_uom as id_uom', 'name', 'symbol')->get();
-        return Inertia::render('Item/create-item', compact('code', 'categories', 'uoms'));
+        return Inertia::render('Item/create-item', compact('item_code', 'categories', 'uoms'));
     }
 
     /**

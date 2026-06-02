@@ -23,7 +23,7 @@ class ItemStore extends FormRequest
     public function rules(): array
     {
         return [
-            'code'                     => 'required|string|unique:items,code',
+            'item_code'                => 'required|string|unique:items,item_code',
             'name'                     => 'required|string|max:255',
             'category_id'              => 'required|exists:categories,id_category',
             'uoms'                     => 'required|array|min:1',
@@ -50,8 +50,8 @@ class ItemStore extends FormRequest
     {
         return [
             'name.required' => 'Nama barang wajib diisi.',
-            'code.required' => 'Kode barang wajib diisi.',
-            'code.unique' => 'Kode barang sudah digunakan.',
+            'item_code.required' => 'Kode barang wajib diisi.',
+            'item_code.unique' => 'Kode barang sudah digunakan.',
             'category_id.required' => 'Kategori wajib dipilih.',
             'category_id.exists' => 'Kategori yang dipilih tidak valid.',
             'uoms.required' => 'Satuan barang wajib diisi.',

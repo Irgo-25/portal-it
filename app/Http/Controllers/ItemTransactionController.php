@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -20,7 +21,8 @@ class ItemTransactionController extends Controller
      */
     public function create()
     {
-        return Inertia::render('ItemTransactions/create-item-transaction');
+        $items = Item::select('id_item as id_item')->get();
+        return Inertia::render('ItemTransactions/create-item-transaction', compact('items'));
     }
 
     /**
